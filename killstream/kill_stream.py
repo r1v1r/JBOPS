@@ -568,7 +568,7 @@ class Notification(object):
 def get_user_city_from_ip(ip_address, server):
     
     whois_data = server.get_whois_lookup(ip_address)
-    logging.debug("data " + str(whois_data))
+    logging.debug('dict log: %s', whois_data)
     
     if 'nets' in whois_data and whois_data['nets']:
         city = whois_data['nets'][0].get('city', 'City not found')
