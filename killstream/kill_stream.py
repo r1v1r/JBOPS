@@ -308,8 +308,8 @@ class Tautulli(object):
 
         return self._call_api('notify', payload)
     
-    def get_whois_lookup(self):
-        return self._call_api('get_whois_lookup', {})
+    def get_whois_lookup(self, ipaddress):
+        return self._call_api('get_whois_lookup', {'ip_address': ipaddress})
 
     def terminate_session(self, session_key=None, session_id=None, message=''):
         """Call Tautulli's terminate_session api endpoint"""
