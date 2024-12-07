@@ -571,10 +571,10 @@ def get_user_city_from_ip(ip_address, server):
     logging.debug('dict log: %s', whois_data)
     
     if 'nets' in whois_data and whois_data['nets']:
-        city = whois_data['nets'][0].get('city', 'City not found')
+        city = whois_data['nets'][0].get('city', None)
     else:
-        city = 'City not found'
-    logging.debug("get_user_city_from_ip" + city)
+        city = None
+    logging.debug("get_user_city_from_ip " + city)
     return city
 
 if __name__ == "__main__":
@@ -644,8 +644,9 @@ if __name__ == "__main__":
         logging.basicConfig()
         logging.getLogger().setLevel(logging.DEBUG)
         tautulli_stream.get_all_stream_info()
-        if opts.location is not get_user_city_from_ip(tautulli_stream.ip_address, tautulli_server):
-            logging.debug('Location allowed' + opts.location)
+        city = get_user_city_from_ip(tautulli_stream.ip_address, tautulli_server) 
+        if city is not None and opts.location != city:
+            logging.debug('Location allowed ' + opts.location)
             tautulli_stream.terminate("You are outside of the supported region.")
 
     elif opts.jbop == 'stream':
