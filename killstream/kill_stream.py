@@ -561,6 +561,16 @@ class Notification(object):
                                    separators=(',', ': '))
         self.send(body=slack_message)
 
+def get_user_city_from_ip(ip_address, server):
+    
+    whois_data = server.get_whois_lookup(ip_address)
+    
+    if 'nets' in whois_data and whois_data['nets']:
+        city = whois_data['nets'][0].get('city', 'City not found')
+    else:
+        city = 'City not found'
+    
+    return city
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -573,6 +583,7 @@ if __name__ == "__main__":
                         help='The username of the person streaming.')
     parser.add_argument('--sessionId',
                         help='The unique identifier for the stream.')
+    parser.add_argument('--location', type=str)
     parser.add_argument('--notify', type=int,
                         help='Notification Agent ID number to Agent to ' +
                         'send notification.')
@@ -623,7 +634,13 @@ if __name__ == "__main__":
     else:
         kill_message = 'The server owner has ended the stream.'
 
-    if opts.jbop == 'stream':
+    # Kill stream if location does not match the allowed region
+    if opts.jbop == 'stream' and opts.location:
+        tautulli_stream.get_all_stream_info()
+        if opts.location is not get_user_city_from_ip(tautulli_stream.ipaddress, tautulli_server):
+            tautulli_stream.terminate("You are outside of the supported region.")
+
+    elif opts.jbop == 'stream':
         tautulli_stream.terminate(kill_message)
         notify(opts, kill_message, 'Stream', tautulli_stream, tautulli_server)
 
@@ -637,3 +654,4 @@ if __name__ == "__main__":
         killed_stream = tautulli_stream.terminate_long_pause(kill_message, opts.limit, opts.interval)
         if killed_stream:
             notify(opts, kill_message, 'Paused', tautulli_stream, tautulli_server)
+
