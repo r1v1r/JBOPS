@@ -56,6 +56,7 @@ import sys
 import json
 import time
 import argparse
+import logging
 from datetime import datetime
 from requests import Session
 from requests.adapters import HTTPAdapter
@@ -572,7 +573,7 @@ def get_user_city_from_ip(ip_address, server):
         city = whois_data['nets'][0].get('city', 'City not found')
     else:
         city = 'City not found'
-    
+    logging.debug("get_user_city_from_ip" + city)
     return city
 
 if __name__ == "__main__":
@@ -641,6 +642,7 @@ if __name__ == "__main__":
     if opts.jbop == 'stream' and opts.location:
         tautulli_stream.get_all_stream_info()
         if opts.location is not get_user_city_from_ip(tautulli_stream.ip_address, tautulli_server):
+            logging.debug('Location allowed' + opts.location)
             tautulli_stream.terminate("You are outside of the supported region.")
 
     elif opts.jbop == 'stream':
