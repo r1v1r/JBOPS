@@ -640,6 +640,8 @@ if __name__ == "__main__":
 
     # Kill stream if location does not match the allowed region
     if opts.jbop == 'stream' and opts.location:
+        logging.basicConfig()
+        logging.getLogger().setLevel(logging.DEBUG)
         tautulli_stream.get_all_stream_info()
         if opts.location is not get_user_city_from_ip(tautulli_stream.ip_address, tautulli_server):
             logging.debug('Location allowed' + opts.location)
