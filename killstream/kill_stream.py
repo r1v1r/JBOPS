@@ -569,9 +569,13 @@ def get_user_city_from_ip(ip_address, server):
     
     whois_data = server.get_whois_lookup(ip_address)
     logging.debug('dict log: %s', whois_data)
+
+    city = None
     
     if 'nets' in whois_data and whois_data['nets']:
-        city = whois_data['nets'][0].get('city', None)
+        for net in whois_data['nets']:
+            if city is None:
+                city = net.get('city', None)
     else:
         city = None
     logging.debug('get_user_city_from_ip %s', city)
