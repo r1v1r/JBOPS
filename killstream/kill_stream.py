@@ -637,7 +637,7 @@ if __name__ == "__main__":
     # Kill stream if location does not match the allowed region
     if opts.jbop == 'stream' and opts.location:
         tautulli_stream.get_all_stream_info()
-        if opts.location is not get_user_city_from_ip(tautulli_stream.ipaddress, tautulli_server):
+        if opts.location is not get_user_city_from_ip(tautulli_stream.ip_address, tautulli_server):
             tautulli_stream.terminate("You are outside of the supported region.")
 
     elif opts.jbop == 'stream':
