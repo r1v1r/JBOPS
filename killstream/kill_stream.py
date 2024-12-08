@@ -651,7 +651,9 @@ if __name__ == "__main__":
         city = get_user_city_from_ip(tautulli_stream.ip_address, tautulli_server) 
         if city is not None and opts.location != city:
             logging.debug('Location allowed %s', opts.location)
-            tautulli_stream.terminate("You are outside of the supported region.")
+            kill_message = 'You are outside of the supported region.'
+            tautulli_stream.terminate(kill_message)
+            notify(opts, kill_message, 'Location', tautulli_stream, tautulli_server)
 
     elif opts.jbop == 'stream':
         tautulli_stream.terminate(kill_message)
