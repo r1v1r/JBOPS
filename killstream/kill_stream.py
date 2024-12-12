@@ -570,7 +570,7 @@ def get_user_city_from_ip(ip_address, server):
     geo_data = server.get_geoip_lookup(ip_address)
     logging.debug('dict log: %s', geo_data)
 
-    city = geo_data.get('city', None)
+    city = geo_data.get('city')
     
     logging.debug('get_user_city_from_ip %s', city)
     return city
@@ -642,8 +642,8 @@ if __name__ == "__main__":
         logging.basicConfig()
         logging.getLogger().setLevel(logging.DEBUG)
         tautulli_stream.get_all_stream_info()
-        city = get_user_city_from_ip(tautulli_stream.ip_address, tautulli_server) 
-        if city is not None and opts.location != city:
+        city = get_user_city_from_ip(tautulli_stream.ip_address, tautulli_server)
+        if (city is not "Unknown" or city is not None) and opts.location is not city:
             logging.debug('Location allowed %s', opts.location)
             kill_message = 'You are outside of the supported region.'
             tautulli_stream.terminate(kill_message)
