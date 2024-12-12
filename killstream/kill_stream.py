@@ -643,7 +643,7 @@ if __name__ == "__main__":
         logging.getLogger().setLevel(logging.DEBUG)
         tautulli_stream.get_all_stream_info()
         city = get_user_city_from_ip(tautulli_stream.ip_address, tautulli_server)
-        if (city is not "Unknown" or city is not None) and opts.location != city:
+        if (city != "Unknown" or city is not None) and opts.location != city:
             logging.debug('Location allowed %s', opts.location)
             kill_message = 'You are outside of the supported region.'
             tautulli_stream.terminate(kill_message)
