@@ -309,8 +309,8 @@ class Tautulli(object):
 
         return self._call_api('notify', payload)
     
-    def get_whois_lookup(self, ipaddress):
-        return self._call_api('get_whois_lookup', {'ip_address': ipaddress})
+    def get_geoip_lookup(self, ip_address):
+        return self._call_api('get_geoip_lookup', {'ip_address': ip_address})
 
     def terminate_session(self, session_key=None, session_id=None, message=''):
         """Call Tautulli's terminate_session api endpoint"""
@@ -567,17 +567,11 @@ class Notification(object):
 
 def get_user_city_from_ip(ip_address, server):
     
-    whois_data = server.get_whois_lookup(ip_address)
-    logging.debug('dict log: %s', whois_data)
+    geo_data = server.get_geoip_lookup(ip_address)
+    logging.debug('dict log: %s', geo_data)
 
-    city = None
+    city = geo_data.get('city', None)
     
-    if 'nets' in whois_data and whois_data['nets']:
-        for net in whois_data['nets']:
-            if city is None:
-                city = net.get('city', None)
-    else:
-        city = None
     logging.debug('get_user_city_from_ip %s', city)
     return city
 
